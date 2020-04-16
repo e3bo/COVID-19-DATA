@@ -1,7 +1,5 @@
 name: gdph-daily-charts
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the autoupdate branch
 on:
   schedule:
     - cron : '03  1 * * *' # hours are UTC (UTC hour = EST hour +4) 
@@ -9,36 +7,20 @@ defaults:
   run:
     working-directory: georgia/ga_GDPH_daily_status_report
 jobs:
-  build:
+  scrape:
     name: ga-dph-chart-scrape
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@master
-    #install R
-    - uses: r-lib/actions/setup-r@master
-    #Install node
-    - name: install libv8-dev
-      run: sudo apt-get install libv8-dev
-    #Install R package dependencies
-    - name: Install dependencies
-      run: Rscript -e  "install.packages(c('xml2', 'tidyverse', 'V8'), repos = 'https://cloud.r-project.org', dependencies = NA)" 
-    #scrape 
-    - name: Scrape data from GDPH website
-      run: ./chart-scraper.R
-    #Push back to repo
-    - name: Commit files
-      run: |
-        git pull
-        git add dash.html GA-DPH-CanvasJS-data-cases-deaths.csv
-        git config --local user.email "actions@users.noreply.github.com"
-        git config --local user.name "Automated Publisher"
-        git commit -m "gdph-daily-charts Autoupdate"
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: master
+     - uses: actions/checkout@master
+     - uses: e3bo/ga-dph-covid-chart-scraper@v0
+     - name: Commit and push output files
+       shell: bash
+       run: |
+         git pull
+         git add dash.html GA-DPH-CanvasJS-data-cases-deaths.csv
+         git config --local user.email "actions@users.noreply.github.com"
+         git config --local user.name "Automated Publisher"
+         git commit -m "gdph-daily-charts Autoupdate"
+         git push
+       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
