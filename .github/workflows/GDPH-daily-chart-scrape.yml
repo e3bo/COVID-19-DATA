@@ -1,8 +1,9 @@
 name: gdph-daily-charts
 
 on:
-  schedule:
-    - cron: '03  1 * * *' # hours are UTC (UTC hour = EST hour +4) 
+  push:
+        #schedule:
+        #- cron: '03  1 * * *' # hours are UTC (UTC hour = EST hour +4) 
 defaults:
   run:
 jobs:
