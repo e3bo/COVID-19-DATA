@@ -7,8 +7,7 @@ defaults:
   run:
     working-directory: georgia/ga_GDPH_daily_status_report
 jobs:
-  scrape:
-    name: ga-dph-chart-scrape
+  build:
     runs-on: ubuntu-latest
     steps:
      - uses: actions/checkout@master
@@ -16,6 +15,8 @@ jobs:
      - name: Commit and push output files
        shell: bash
        run: |
+         pwd
+         ls
          git pull
          git add dash.html GA-DPH-CanvasJS-data-cases-deaths.csv
          git config --local user.email "actions@users.noreply.github.com"
