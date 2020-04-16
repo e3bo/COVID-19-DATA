@@ -4,7 +4,7 @@ name: gdph-daily-charts
 # events but only for the autoupdate branch
 on:
   schedule:
-    - cron : '10  0 * * *' # will run this script at 8:10 PM EST daily 
+    - cron : '16  0 * * *' # will run this script at 8:16 PM EST daily 
 defaults:
   run:
     working-directory: georgia/ga_GDPH_daily_status_report
