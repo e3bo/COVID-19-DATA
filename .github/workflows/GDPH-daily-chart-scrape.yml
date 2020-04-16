@@ -21,8 +21,8 @@ jobs:
     #install R
     - uses: r-lib/actions/setup-r@master
     #Install node
-    - name: install libnode-dev
-      run: sudo apt-get install libnode-dev
+    - name: install libv8-dev
+      run: sudo apt-get install libv8-dev
     #Install R package dependencies
     - name: Install dependencies
       run: Rscript -e  "install.packages(c('xml2', 'tidyverse', 'V8'), repos = 'https://cloud.r-project.org', dependencies = NA)" 
