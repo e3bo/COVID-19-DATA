@@ -4,7 +4,7 @@ name: gdph-daily-charts
 # events but only for the autoupdate branch
 on:
   schedule:
-    - cron : '16  0 * * *' # will run this script at 8:16 PM EST daily 
+    - cron : '03  1 * * *' # hours are UTC (UTC hour = EST hour +4) 
 defaults:
   run:
     working-directory: georgia/ga_GDPH_daily_status_report
@@ -20,9 +20,9 @@ jobs:
     - uses: actions/checkout@master
     #install R
     - uses: r-lib/actions/setup-r@master
-    #Install curl 
-    - name: install curl
-      run: sudo apt-get install libcurl4-openssl-dev
+    #Install node
+    - name: install libnode-dev
+      run: sudo apt-get install libnode-dev
     #Install R package dependencies
     - name: Install dependencies
       run: Rscript -e  "install.packages(c('xml2', 'tidyverse', 'V8'), repos = 'https://cloud.r-project.org', dependencies = NA)" 
