@@ -1,0 +1,44 @@
+name: gdph-daily-charts
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the autoupdate branch
+on:
+  schedule:
+    - cron : '10  0 * * *' # will run this script at 8:10 PM EST daily 
+defaults:
+  run:
+    working-directory: georgia/ga_GDPH_daily_status_report
+jobs:
+  build:
+    name: ga-dph-chart-scrape
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@master
+    #install R
+    - uses: r-lib/actions/setup-r@master
+    #Install curl 
+    - name: install curl
+      run: sudo apt-get install libcurl4-openssl-dev
+    #Install R package dependencies
+    - name: Install dependencies
+      run: Rscript -e  "install.packages(c('xml2', 'tidyverse', 'V8'), repos = 'https://cloud.r-project.org', dependencies = NA)" 
+    #scrape 
+    - name: Scrape data from GDPH website
+      run: ./chart-scraper.R
+    #Push back to repo
+    - name: Commit files
+      run: |
+        git pull
+        git add dash.html GA-DPH-CanvasJS-data-cases-deaths.csv
+        git config --local user.email "actions@users.noreply.github.com"
+        git config --local user.name "Automated Publisher"
+        git commit -m "gdph-daily-charts Autoupdate"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
