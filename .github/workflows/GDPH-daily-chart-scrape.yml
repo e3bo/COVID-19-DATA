@@ -1,14 +1,15 @@
 name: gdph-daily-charts
 
 on:
-  schedule:
-    - cron: '03  1 * * *' # hours are UTC (UTC hour = EST hour +4) 
+  push:
+    #schedule:
+    #- cron: '03  1 * * *' # hours are UTC (UTC hour = EST hour +4) 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
      - uses: actions/checkout@v2
-     - uses: e3bo/ga-dph-covid-chart-scraper@v0.4
+     - uses: e3bo/ga-dph-covid-chart-scraper@v0.5
      - name: Commit and push output files
        shell: bash
        run: |
